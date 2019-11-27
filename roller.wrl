@@ -1,0 +1,35 @@
+#VRML V2.0 utf8
+Transform {
+  children Shape {
+    appearance DEF SolidYellow Appearance {
+      material Material {
+        diffuseColor 1 1 0
+      }
+    }
+    geometry Cone { }
+  }
+}
+
+Group {
+  children [
+    DEF TheTouchSensor TouchSensor {}
+    DEF LittleSphere Transform {
+      translation 0 1.2 0
+      children Shape {
+        appearance USE SolidYellow
+        geometry Sphere {radius 0.2}
+      }
+    }
+  ]
+}
+
+DEF TheTimeSensor TimeSensor {cycleInterval 10}
+
+DEF TheInterpolator PositionInterpolator {
+  key [ 0, 1 ]
+  keyValue [ 0 1.2 0, 1.2 -1 0 ]
+}
+
+ROUTE TheTouchSensor.touchTime TO TheTimeSensor.startTime
+ROUTE TheTimeSensor.fraction_changed TO TheInterpolator.set_fraction
+ROUTE TheInterpolator.value_changed TO LittleSphere.set_translation
